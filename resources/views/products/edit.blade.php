@@ -5,12 +5,13 @@
         <div class="row">
             <div class="col rounded-3 bg-info p-3 my-2">
                 <h2 class="text-center">Edit Data Produk</h2>
-                <form action="{{ route('products.update', ['userId' => $userId, 'id' => $product->id]) }}" method="POST">
+                <form action="{{ route('products.update', ['userId' => $userId, 'id' => $product->id]) }}" method="POST"
+                    enctype="multipart/form-data">
                     @csrf()
                     {{-- <input type="hidden" name="userId" value="{{ $userId }}"> --}}
                     <div class="mb-3">
                         <label for="foto" class="form-label">Gambar Produk</label>
-                        <input type="text" class="form-control @error('foto') is-invalid @enderror" id="foto"
+                        <input type="file" class="form-control @error('foto') is-invalid @enderror" id="foto"
                             name="foto" value="{{ old('foto', $product->foto) }}" placeholder="Masukkan Gambar Produk">
                         @error('foto')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -71,6 +72,7 @@
                         @enderror
                     </div>
                     <div class="text-center">
+                        <a href="{{ url()->previous() }}" class="btn btn-warning">Back</a>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
                 </form>

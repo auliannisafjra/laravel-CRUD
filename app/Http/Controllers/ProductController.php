@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductCreateRequest;
 use App\Models\Product;
 use App\Models\User;
 use App\Models\Toko;
@@ -51,30 +52,17 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, $userId)
+    public function store(ProductCreateRequest $request, $userId)
     {
-        //dd($request)->all();
-        $request->validate([
-            'foto' => 'required',
-            'nama' => 'required',
-            'berat' => 'required',
-            'harga' => 'required',
-            'stok' => 'required',
-            'kondisi' => ['required', 'in:Baru,Bekas'],
-            'deskripsi' => 'required',
-        ], [
-            'foto.required' => 'Kolom Gambar Produk wajib diisi.',
-            'nama.required' => 'Kolom Nama Produk wajib diisi.',
-            'berat.required' => 'Kolom Berat Produk wajib diisi.',
-            'harga.required' => 'Kolom Harga Produk wajib diisi.',
-            'stok.required' => 'Kolom Stok Produk wajib diisi.',
-            'kondisi.required' => 'Kolom Kondisi Produk wajib diisi.',
-            'deskripsi.required' => 'Kolom Deskripsi Produk wajib diisi.',
-        ]);
+        $validatedData = $request->validated();
+
+        if ($request->hasFile('foto')) {
+            $imagePath = $request->file('foto')->store('katalog', 'public');
+        }
 
         $product = new Product();
         $product->user_id = $userId;
-        $product->foto = $request->foto;
+        $product->foto = $imagePath;
         $product->nama = $request->nama;
         $product->berat = $request->berat;
         $product->harga = $request->harga;
@@ -108,28 +96,16 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(ProductCreateRequest $request, $id)
     {
-        $request->validate([
-            'foto' => 'required',
-            'nama' => 'required',
-            'berat' => 'required',
-            'harga' => 'required',
-            'stok' => 'required',
-            'kondisi' => ['required', 'in:Baru,Bekas'],
-            'deskripsi' => 'required',
-        ], [
-            'foto.required' => 'Kolom Gambar Produk wajib diisi.',
-            'nama.required' => 'Kolom Nama Produk wajib diisi.',
-            'berat.required' => 'Kolom Berat Produk wajib diisi.',
-            'harga.required' => 'Kolom Harga Produk wajib diisi.',
-            'stok.required' => 'Kolom Stok Produk wajib diisi.',
-            'kondisi.required' => 'Kolom Kondisi Produk wajib diisi.',
-            'deskripsi.required' => 'Kolom Deskripsi Produk wajib diisi.',
-        ]);
+        $validatedData = $request->validated();
+
+        if ($request->hasFile('foto')) {
+            $imagePath = $request->file('foto')->store('katalog', 'public');
+        }
 
         $product = Product::findOrFail($id);
-        $product->foto = $request->foto;
+        $product->foto = $imagePath;
         $product->nama = $request->nama;
         $product->berat = $request->berat;
         $product->harga = $request->harga;

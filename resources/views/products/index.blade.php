@@ -24,7 +24,10 @@
             @foreach ($products as $product)
                 <div class="col-3">
                     <div class="card bg-white w-100" style=" margin-bottom: 10px; gap: 10px">
-                        <img class="card-img-top" src="{{ $product->foto }}">
+                        @if ($product->foto)
+                            <img class="card-img-top" src="{{ Storage::url($product->foto) }}" width="100px" height="250px"
+                                alt="Display Product">
+                        @endif
                         <div class="card-body">
                             <div class="d-flex justify-content-between my-2">
                                 <p class="card-title fw-bold my-auto" style="font-size: 20px">
